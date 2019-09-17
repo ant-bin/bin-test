@@ -6,7 +6,9 @@ api.authorize('***REMOVED***').then(
 ()=>{
 	console.log("OK");
 	getPortfolio();
-	//getProposal(newReq);
+	subscribeToAllOpenContracts();
+	subscribeToTransactions();
+	getProposal(newReq);
 	//getProfitTable(profReq);
 },
 ()=>console.log("Fail")
@@ -75,10 +77,10 @@ pingWithEventHandlers();
 
 newReq = {
 	"amount": 1,
-	"basis": "payout",
+	"basis": "stake",
 	"contract_type": "PUT",
 	"currency": "USD",
-	"duration": 5,
+	"duration": 10,
 	"duration_unit": "m",
 	"symbol": "frxEURUSD"
 }	
@@ -109,5 +111,21 @@ function getProfitTable(req){
 		});
 	});
 	api.getProfitTable(req);
+}
+
+function subscribeToTransactions(){
+	api.events.on('transaction', function(data) {
+	    // do stuff with portfolio data
+		console.log(data);
+	});
+	api.subscribeToTransactions();
+}
+
+function subscribeToAllOpenContracts(){
+	api.events.on('proposal_open_contract', function(data) {
+	    // do stuff with portfolio data
+		console.log(data);
+	});
+	api.subscribeToAllOpenContracts();
 }
 
