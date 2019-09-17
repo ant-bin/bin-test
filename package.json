@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "binary-live-api": "^29.0.0",
+    "ws": "^7.1.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production"
+  },
+  "keywords": [],
+  "author": "ant",
+  "license": "ISC"
+}
