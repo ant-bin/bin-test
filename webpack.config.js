@@ -3,6 +3,7 @@ module.exports = {
     main: "./src/test1.js",
   },
   output: { "filename": "[name].js" },
+  target: 'node',
   module: {
     rules: [
       {
