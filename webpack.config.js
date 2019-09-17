@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    main: "./src/test1.js",
+    main: "./src/test1.js"
   },
   output: { "filename": "[name].js" },
   target: 'node',
@@ -12,7 +12,7 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
-      },
+      }
     ]
   },
 };
