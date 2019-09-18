@@ -1,13 +1,13 @@
 module.exports = {
   entry: {
-    main: "./src/test1.js"
+    main: "./src/app.js"
   },
   output: { "filename": "[name].js" },
   target: 'node',
   module: {
     rules: [
       {
-        test: /\.js$|\.jsx$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader"
