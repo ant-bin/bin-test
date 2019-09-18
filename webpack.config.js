@@ -11,7 +11,7 @@ const htmlPlugin = [
 module.exports = {
   optimization: {
     // We no not want to minimize our code.
-    minimize: false
+    //minimize: false
   },
   entry: {
     main: "./src/app.js",
