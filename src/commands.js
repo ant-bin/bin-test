@@ -1,8 +1,5 @@
-var ws = require('ws');
-var LiveApi = require('binary-live-api').LiveApi;
-
-var api = new LiveApi({ websocket: ws, appId: ***REMOVED*** });
-api.authorize('***REMOVED***').then(
+//var api = new LiveApi({ websocket: ws, appId: ***REMOVED*** });
+/* api.authorize('***REMOVED***').then(
     () => {
         console.log("OK");
         getPortfolio();
@@ -12,16 +9,16 @@ api.authorize('***REMOVED***').then(
         //getProfitTable(profReq);
     },
     () => console.log("Fail")
-);
-//console.log(api);
+); */
 
-function pingWithEventHandlers() {
+export const pingWithEventHandlers = () => {
     api.events.on('ping', function (response) {
         console.log(response);
     });
     api.ping();
 }
-function tradingTimesDemo() {
+
+export const  tradingTimesDemo = () => {
     api.events.on('trading_times', function (response) {
         //console.log(response.trading_times.markets);
         var markets = response.trading_times.markets
@@ -33,7 +30,7 @@ function tradingTimesDemo() {
     api.getTradingTimes(new Date());
 }
 
-function getPortfolio() {
+export const getPortfolio = () => {
     api.events.on('portfolio', function (data) {
         // do stuff with portfolio data
         //console.log(data);
@@ -45,7 +42,7 @@ function getPortfolio() {
     api.getPortfolio();
 }
 
-function getActiveSymbolsBrief() {
+export const getActiveSymbolsBrief = () => {
     api.events.on('active_symbols', function (data) {
         // do stuff with portfolio data
         //console.log(data);
@@ -58,7 +55,7 @@ function getActiveSymbolsBrief() {
 }
 
 
-function getProposal(req) {
+export const getProposal = (req) => {
     api.events.on('proposal', function (data) {
         // do stuff with portfolio data
         //console.log(data);
@@ -70,12 +67,7 @@ function getProposal(req) {
 }
 
 
-pingWithEventHandlers();
-//tradingTimesDemo();
-//getPortfolio();
-//getActiveSymbolsBrief();
-
-newReq = {
+export const newReq = {
     "amount": 1,
     "basis": "stake",
     "contract_type": "PUT",
@@ -85,9 +77,7 @@ newReq = {
     "symbol": "frxEURUSD"
 }
 
-//getProposal(newReq);
-
-function getRealityCheckSummary() {
+export const getRealityCheckSummary = () => {
     api.events.on('reality_check', function (data) {
         // do stuff with portfolio data
         console.log(data);
@@ -95,13 +85,13 @@ function getRealityCheckSummary() {
     api.getRealityCheckSummary();
 }
 
-var profReq = {
+export const profReq = {
     "description": 1,
     "limit": 3,
     "sort": "DESC"
 }
 
-function getProfitTable(req) {
+export const getProfitTable = (req) => {
     api.events.on('profit_table', function (data) {
         // do stuff with portfolio data
         //console.log(data);
@@ -113,7 +103,7 @@ function getProfitTable(req) {
     api.getProfitTable(req);
 }
 
-function subscribeToTransactions() {
+export const subscribeToTransactions = () => {
     api.events.on('transaction', function (data) {
         // do stuff with portfolio data
         console.log(data);
@@ -121,11 +111,10 @@ function subscribeToTransactions() {
     api.subscribeToTransactions();
 }
 
-function subscribeToAllOpenContracts() {
+export const subscribeToAllOpenContracts = () => {
     api.events.on('proposal_open_contract', function (data) {
         // do stuff with portfolio data
         console.log(data);
     });
     api.subscribeToAllOpenContracts();
 }
-
