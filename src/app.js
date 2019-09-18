@@ -1,6 +1,7 @@
 const ws = require("ws")
-const LiveApi = require('binary-live-api').LiveApi;
-const { pingWithEventHandlers } = require("./commands.js")
+//const LiveApi = require('binary-live-api').LiveApi;
+const { pingWithEventHandlers } = require("./apicommands.js")
+const { getStatus, startLive } = require("./commands.js")
 const express = require('express');
 const url = require('url');
 const PORT = process.env.PORT || 9090
@@ -8,6 +9,12 @@ const PORT = process.env.PORT || 9090
 
 const app = express();
 const server = require('http').createServer(app);
+
+export const conf = {
+    api: null,
+    appid: null,
+    key: null,
+}
 
 app.use(express.static(__dirname + '/node_modules'));
 app.use(express.json({}));
@@ -21,6 +28,17 @@ app.use((err, req, res, next) => {
     }
 })
 app.get('/', function (req, res, next) {
+    if (req.query.cmd && req.query.cmd === "status") {
+        return res.json(getStatus(conf));
+    }
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.post('/', function (req, res, next) {
+    if (req.query.cmd && req.query.cmd === "start") {
+
+        return res.json(startLive(conf, req.body));
+    }
     res.sendFile(__dirname + '/index.html');
 });
 

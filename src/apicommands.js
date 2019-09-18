@@ -1,15 +1,23 @@
-//var api = new LiveApi({ websocket: ws, appId: appId });
-/* api.authorize(key).then(
-    () => {
-        console.log("OK");
-        getPortfolio();
-        subscribeToAllOpenContracts();
-        subscribeToTransactions();
-        //getProposal(newReq);
-        //getProfitTable(profReq);
-    },
-    () => console.log("Fail")
-); */
+const ws = require("ws")
+const LiveApi = require('binary-live-api').LiveApi;
+
+export const startApi = (conf) => {
+
+    //console.log(conf);return;
+    conf.api = new LiveApi({ websocket: ws, appId: conf.appid });
+    conf.api.authorize(conf.key).then(
+        () => {
+            console.log("OK");
+            //getPortfolio();
+            //subscribeToAllOpenContracts();
+            //subscribeToTransactions();
+            //getProposal(newReq);
+            //getProfitTable(profReq);
+
+        },
+        () => console.log("Fail")
+    );
+}
 
 export const pingWithEventHandlers = () => {
     api.events.on('ping', function (response) {
@@ -18,7 +26,7 @@ export const pingWithEventHandlers = () => {
     api.ping();
 }
 
-export const  tradingTimesDemo = () => {
+export const tradingTimesDemo = () => {
     api.events.on('trading_times', function (response) {
         //console.log(response.trading_times.markets);
         var markets = response.trading_times.markets
