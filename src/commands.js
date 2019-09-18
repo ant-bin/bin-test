@@ -1,5 +1,5 @@
-//var api = new LiveApi({ websocket: ws, appId: 16143 });
-/* api.authorize('G0wCksn3HRZr9aF').then(
+//var api = new LiveApi({ websocket: ws, appId: appId });
+/* api.authorize(key).then(
     () => {
         console.log("OK");
         getPortfolio();
