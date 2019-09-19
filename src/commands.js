@@ -21,8 +21,8 @@ export const startLive = (conf, params) => {
     if (params && params.key && params.appid) {
         conf.key = params.key;
         conf.appid = params.appid
+        console.log(conf, params)
+        startApi(conf)
     }
-    console.log(conf, params)
-    startApi(conf)
     return getStatus(conf)
 }
