@@ -18,7 +18,7 @@ export const getStatus = (conf) => {
 }
 
 export const startLive = (conf, params) => {
-    if (params && params.key && params.appid) {
+    if (!conf.api && params && params.key && params.appid) {
         conf.key = params.key;
         conf.appid = params.appid
         console.log(conf, params)
