@@ -19,11 +19,12 @@ export const startApi = (conf) => {
     );
 }
 
-export const pingWithEventHandlers = () => {
-    api.events.on('ping', function (response) {
+export const pingWithEventHandlers = (conf) => {
+    conf.api.events.on('ping', function (response) {
         console.log(response);
+        conf.response = response
     });
-    api.ping();
+    conf.api.ping();
 }
 
 export const tradingTimesDemo = () => {
@@ -63,15 +64,15 @@ export const getActiveSymbolsBrief = () => {
 }
 
 
-export const getProposal = (req) => {
-    api.events.on('proposal', function (data) {
+export const getProposal = (conf,req) => {
+    conf.api.events.on('proposal', function (data) {
         // do stuff with portfolio data
         //console.log(data);
         var prop = data.proposal;
         console.log(prop.spot + " " + prop.id);
-        api.buyContract(prop.id, 1.10);
+        //api.buyContract(prop.id, 1.10);
     });
-    api.getPriceProposalForContract(req);
+    conf.api.getPriceProposalForContract(req);
 }
 
 

@@ -1,7 +1,6 @@
 const ws = require("ws")
 //const LiveApi = require('binary-live-api').LiveApi;
-const { pingWithEventHandlers } = require("./apicommands.js")
-const { getStatus, startLive } = require("./commands.js")
+const { getStatus, openTrade, ping, startLive } = require("./commands.js")
 const express = require('express');
 const url = require('url');
 const PORT = process.env.PORT || 9090
@@ -31,6 +30,10 @@ app.get('/', function (req, res, next) {
     if (req.query.cmd && req.query.cmd === "status") {
         return res.json(getStatus(conf));
     }
+    if (req.query.cmd && req.query.cmd === "ping") {
+
+        return res.json(ping(conf));
+    }
     res.sendFile(__dirname + '/index.html');
 });
 
@@ -39,6 +42,11 @@ app.post('/', function (req, res, next) {
 
         return res.json(startLive(conf, req.body));
     }
+    if (req.query.cmd && req.query.cmd === "open") {
+
+        return res.json(openTrade(conf, req.body));
+    }
+
     res.sendFile(__dirname + '/index.html');
 });
 
