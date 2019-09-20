@@ -1,7 +1,8 @@
 const { startApi, getProposal, pingWithEventHandlers } = require("./apicommands.js")
+const { conf, status } = require("./conf")
 
-export const getStatus = (conf) => {
-    const status = {}
+export const getStatus = () => {
+    //const status = {}
     if (!conf.api) {
         status["api"] = "not connected"
     }
@@ -20,28 +21,28 @@ export const getStatus = (conf) => {
     return status
 }
 
-export const startLive = (conf, params) => {
+export const startLive = (params) => {
     if (!conf.api && params && params.key && params.appid) {
         conf.key = params.key;
         conf.appid = params.appid
         console.log(conf, params)
-        startApi(conf)
+        startApi()
     }
-    return getStatus(conf)
+    return getStatus()
 }
 
-export const openTrade = (conf, params) => {
+export const openTrade = (params) => {
     if (conf.api && params) {
 
-        console.log(params)
-        //getProposal(conf, params)
+        conf.params = params
+        getProposal(params)
     }
-    return getStatus(conf)
+    return getStatus()
 }
 
-export const ping = (conf) => {
+export const ping = () => {
     if (conf.api) {
-        pingWithEventHandlers(conf)
+        pingWithEventHandlers()
     }
-    return getStatus(conf)
+    return getStatus()
 }

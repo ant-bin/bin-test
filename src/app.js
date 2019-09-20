@@ -1,19 +1,14 @@
 const ws = require("ws")
 //const LiveApi = require('binary-live-api').LiveApi;
-const { getStatus, openTrade, ping, startLive } = require("./commands.js")
 const express = require('express');
 const url = require('url');
 const PORT = process.env.PORT || 9090
 
+const { conf, status } = require("./conf")
+const { getStatus, openTrade, ping, startLive } = require("./commands.js")
 
 const app = express();
 const server = require('http').createServer(app);
-
-export const conf = {
-    api: null,
-    appid: null,
-    key: null,
-}
 
 app.use(express.static(__dirname + '/node_modules'));
 app.use(express.json({}));
@@ -28,11 +23,11 @@ app.use((err, req, res, next) => {
 })
 app.get('/', function (req, res, next) {
     if (req.query.cmd && req.query.cmd === "status") {
-        return res.json(getStatus(conf));
+        return res.json(getStatus());
     }
     if (req.query.cmd && req.query.cmd === "ping") {
 
-        return res.json(ping(conf));
+        return res.json(ping());
     }
     res.sendFile(__dirname + '/index.html');
 });
@@ -40,11 +35,11 @@ app.get('/', function (req, res, next) {
 app.post('/', function (req, res, next) {
     if (req.query.cmd && req.query.cmd === "start") {
 
-        return res.json(startLive(conf, req.body));
+        return res.json(startLive(req.body));
     }
     if (req.query.cmd && req.query.cmd === "open") {
 
-        return res.json(openTrade(conf, req.body));
+        return res.json(openTrade(req.body));
     }
 
     res.sendFile(__dirname + '/index.html');

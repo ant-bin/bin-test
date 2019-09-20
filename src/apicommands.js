@@ -1,7 +1,8 @@
 const ws = require("ws")
 const LiveApi = require('binary-live-api').LiveApi;
+const { conf, status } = require("./conf")
 
-export const startApi = (conf) => {
+export const startApi = () => {
 
     //console.log(conf);return;
     conf.api = new LiveApi({ websocket: ws, appId: conf.appid });
@@ -19,7 +20,7 @@ export const startApi = (conf) => {
     );
 }
 
-export const pingWithEventHandlers = (conf) => {
+export const pingWithEventHandlers = () => {
     conf.api.events.on('ping', function (response) {
         console.log(response);
         conf.response = response
@@ -64,13 +65,13 @@ export const getActiveSymbolsBrief = () => {
 }
 
 
-export const getProposal = (conf,req) => {
+export const getProposal = (req) => {
     conf.api.events.on('proposal', function (data) {
         // do stuff with portfolio data
         //console.log(data);
         var prop = data.proposal;
         console.log(prop.spot + " " + prop.id);
-        //api.buyContract(prop.id, 1.10);
+        conf.api.buyContract(prop.id, 1.10);
     });
     conf.api.getPriceProposalForContract(req);
 }
