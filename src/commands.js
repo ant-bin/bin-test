@@ -35,6 +35,7 @@ export const openTrade = (params) => {
     if (conf.api && params) {
 
         conf.params = params
+        console.log(params)
         getProposal(params)
     }
     return getStatus()
