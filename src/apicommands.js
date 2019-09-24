@@ -23,7 +23,7 @@ export const startApi = () => {
 export const pingWithEventHandlers = () => {
     conf.api.events.on('ping', function (response) {
         console.log(response);
-        conf.response = response
+        //conf.response = response
     });
     conf.api.ping();
 }
@@ -64,18 +64,33 @@ export const getActiveSymbolsBrief = () => {
     api.getActiveSymbolsBrief();
 }
 
-
 export const getProposal = (req) => {
-    conf.api.events.on('proposal', function (data) {
-        // do stuff with portfolio data
-        //console.log(data);
-        var prop = data.proposal;
-        console.log(prop.spot + " " + prop.id);
-        conf.api.buyContract(prop.id, 1.10);
-    });
-    conf.api.getPriceProposalForContract(req);
+    conf.api.getPriceProposalForContract(req)
+        .then(
+            (response) => {
+                //console.log("getProposal - ok", response)
+                var prop = response.proposal;
+                console.log(prop.spot + " " + prop.id, (prop.spot * 1.1).toFixed(2));
+                conf.api.buyContract(prop.id, (prop.spot * 1.1).toFixed(2)).then(
+                    (response) => {
+                        //console.log(response)
+                        const contract = {
+                            contract_id: response.buy.contract_id,
+                            start_time: response.buy.start_time,
+                            transaction_id: response.buy.transaction_id,
+                            spot: prop.spot
+                        }
+                        if (conf.trades === undefined) {
+                            conf.trades = []
+                        }
+                        conf.trades.push(contract)
+                    },
+                    (err) => console.log(err)
+                )
+            },
+            (err) => console.log("getProposal - fail", err)
+        );
 }
-
 
 export const newReq = {
     "amount": 1,
