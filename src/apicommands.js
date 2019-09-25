@@ -9,6 +9,7 @@ export const startApi = () => {
     conf.api.authorize(conf.key).then(
         () => {
             console.log("OK");
+            conf.fail = false
             //getPortfolio();
             //subscribeToAllOpenContracts();
             //subscribeToTransactions();
@@ -16,7 +17,11 @@ export const startApi = () => {
             //getProfitTable(profReq);
 
         },
-        () => console.log("Fail")
+        (err) => {
+            console.log("Fail")
+            console.log(err.error)
+            conf.fail = true
+        }
     );
 }
 
@@ -71,7 +76,8 @@ export const getProposal = (req) => {
                 //console.log("getProposal - ok", response)
                 var prop = response.proposal;
                 console.log(prop.spot + " " + prop.id, (prop.spot * 1.1).toFixed(2));
-                conf.api.buyContract(prop.id, (prop.spot * 1.1).toFixed(2)).then(
+		var max_cPrice = prop.spot * prop.amount * 1.1;
+                conf.api.buyContract(prop.id, max_cPrice.toFixed(2)).then(
                     (response) => {
                         //console.log(response)
                         const contract = {
