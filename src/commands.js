@@ -6,7 +6,10 @@ export const getStatus = () => {
     if (!conf.api) {
         status["api"] = "not connected"
     }
-    else {
+    else if(conf.fail){
+        status["api"] = "fail"
+    }
+    else{
         status["api"] = "online"
     }
     if (!conf.appid) {
@@ -22,7 +25,7 @@ export const getStatus = () => {
 }
 
 export const startLive = (params) => {
-    if (!conf.api && params && params.key && params.appid) {
+    if (conf.fail && params && params.key && params.appid) {
         conf.key = params.key;
         conf.appid = params.appid
         console.log(conf, params)
@@ -32,17 +35,16 @@ export const startLive = (params) => {
 }
 
 export const openTrade = (params) => {
-    if (conf.api && params) {
+    if (!conf.fail && params) {
 
-        conf.params = params
-        console.log(params)
+        params.amount = parseFloat(params.amount) || 1
         getProposal(params)
     }
     return getStatus()
 }
 
 export const ping = () => {
-    if (conf.api) {
+    if (!conf.fail) {
         pingWithEventHandlers()
     }
     return getStatus()
