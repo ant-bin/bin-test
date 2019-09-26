@@ -3,6 +3,7 @@ export const conf = {
     appid: null,
     key: null,
     fail: true,
+    balance: {},
 }
 
 export const status = {

@@ -25,12 +25,22 @@ export const startApi = async () => {
     );
 }
 
-export const pingWithEventHandlers = () => {
-    conf.api.events.on('ping', function (response) {
-        console.log(response);
-        //conf.response = response
+export const subscribeToBalance = async () => {
+    conf.api.events.on('balance', function (response) {
+        //console.log(response)
+        conf.balance = response.balance
     });
-    conf.api.ping();
+    return conf.api.subscribeToBalance().then(
+        (response) => { return response },
+        (error) => { return error }
+    );
+}
+
+export const pingWithEventHandlers = async () => {
+    return conf.api.ping().then(
+        (response) => { return response },
+        (error) => { return error }
+    );
 }
 
 export const tradingTimesDemo = () => {

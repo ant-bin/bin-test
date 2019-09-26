@@ -21,13 +21,17 @@ app.use((err, req, res, next) => {
         next()
     }
 })
-app.get('/', function (req, res, next) {
+app.get('/', async (req, res, next) => {
     if (req.query.cmd && req.query.cmd === "status") {
         return res.json(getStatus());
     }
     if (req.query.cmd && req.query.cmd === "ping") {
 
-        return res.json(ping());
+        let pingret = await ping()
+        return res.json(pingret);
+    }
+    if (req.query.cmd && req.query.cmd === "balance") {
+        return res.json(conf.balance);
     }
     res.sendFile(__dirname + '/index.html');
 });
