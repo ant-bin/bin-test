@@ -32,10 +32,11 @@ app.get('/', function (req, res, next) {
     res.sendFile(__dirname + '/index.html');
 });
 
-app.post('/', function (req, res, next) {
+app.post('/', async (req, res, next) => {
     if (req.query.cmd && req.query.cmd === "start") {
 
-        return res.json(startLive(req.body));
+        await startLive(req.body)
+        return res.json(getStatus());
     }
     if (req.query.cmd && req.query.cmd === "open") {
 

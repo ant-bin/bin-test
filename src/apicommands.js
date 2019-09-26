@@ -2,11 +2,11 @@ const ws = require("ws")
 const LiveApi = require('binary-live-api').LiveApi;
 const { conf, status } = require("./conf")
 
-export const startApi = () => {
+export const startApi = async () => {
 
     //console.log(conf);return;
     conf.api = new LiveApi({ websocket: ws, appId: conf.appid });
-    conf.api.authorize(conf.key).then(
+    return conf.api.authorize(conf.key).then(
         () => {
             console.log("OK");
             conf.fail = false
@@ -76,7 +76,7 @@ export const getProposal = (req) => {
                 //console.log("getProposal - ok", response)
                 var prop = response.proposal;
                 console.log(prop.spot + " " + prop.id, (prop.spot * 1.1).toFixed(2));
-		var max_cPrice = prop.spot * prop.amount * 1.1;
+                var max_cPrice = prop.spot * prop.amount * 1.1;
                 conf.api.buyContract(prop.id, max_cPrice.toFixed(2)).then(
                     (response) => {
                         //console.log(response)

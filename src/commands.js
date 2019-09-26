@@ -6,10 +6,10 @@ export const getStatus = () => {
     if (!conf.api) {
         status["api"] = "not connected"
     }
-    else if(conf.fail){
+    else if (conf.fail) {
         status["api"] = "fail"
     }
-    else{
+    else {
         status["api"] = "online"
     }
     if (!conf.appid) {
@@ -18,20 +18,21 @@ export const getStatus = () => {
     else {
         status["appid"] = conf.appid
     }
-    if(conf.response){
+    if (conf.response) {
         status["response"] = conf.response
     }
     return status
 }
 
-export const startLive = (params) => {
+export const startLive = async (params) => {
     if (conf.fail && params && params.key && params.appid) {
         conf.key = params.key;
         conf.appid = params.appid
-        console.log(conf, params)
-        startApi()
+        await startApi()
     }
-    return getStatus()
+    else {
+        return getStatus()
+    }
 }
 
 export const openTrade = (params) => {
