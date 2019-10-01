@@ -21,6 +21,10 @@ app.use((err, req, res, next) => {
         next()
     }
 })
+app.use((req, res, next) => {
+    console.log("REQUEST: ",req.hostname,req.method,req.originalUrl,req.body)
+    next()
+})
 app.get('/', async (req, res, next) => {
     if (req.query.cmd && req.query.cmd === "status") {
         return res.json(getStatus());
