@@ -10,12 +10,6 @@ export const startApi = async () => {
         () => {
             console.log("OK");
             conf.fail = false
-            //getPortfolio();
-            //subscribeToAllOpenContracts();
-            //subscribeToTransactions();
-            //getProposal(newReq);
-            //getProfitTable(profReq);
-
         },
         (err) => {
             console.log("Fail")
@@ -79,33 +73,40 @@ export const getActiveSymbolsBrief = () => {
     api.getActiveSymbolsBrief();
 }
 
-export const getProposal = (req) => {
-    conf.api.getPriceProposalForContract(req)
+export const getProposal = async (req) => {
+    return conf.api.getPriceProposalForContract(req)
         .then(
             (response) => {
                 //console.log("getProposal - ok", response)
                 var prop = response.proposal;
                 console.log(prop.spot + " " + prop.id, (prop.spot * 1.1).toFixed(2));
-                var max_cPrice = prop.spot * prop.amount * 1.1;
-                conf.api.buyContract(prop.id, max_cPrice.toFixed(2)).then(
-                    (response) => {
-                        //console.log(response)
-                        const contract = {
-                            contract_id: response.buy.contract_id,
-                            start_time: response.buy.start_time,
-                            transaction_id: response.buy.transaction_id,
-                            spot: prop.spot
-                        }
-                        if (conf.trades === undefined) {
-                            conf.trades = []
-                        }
-                        conf.trades.push(contract)
-                    },
-                    (err) => console.log(err)
-                )
+                var max_cPrice = prop.spot * parseFloat(req.amount) * 1.1;
+                return { id: prop.id, "max_cPrice": max_cPrice.toFixed(2), success: true }
             },
-            (err) => console.log("getProposal - fail", err)
+            (err) => {
+                console.log("getProposal - fail", err)
+                return { success: false }
+            }
         );
+}
+
+export const buyContract = async (req) => {
+    return conf.api.buyContract(req.id, req.max_cPrice).then(
+        (response) => {
+            console.log(response)
+            const contract = {
+                contract_id: response.buy.contract_id,
+                start_time: response.buy.start_time,
+                transaction_id: response.buy.transaction_id,
+            }
+            //status.trades.push(contract)
+            return contract
+        },
+        (err) => {
+            console.log(err.error)
+            return { contract_id: 0 } //if error - set contract_id to zero
+        }
+    )
 }
 
 export const newReq = {
@@ -144,18 +145,24 @@ export const getProfitTable = (req) => {
     api.getProfitTable(req);
 }
 
-export const subscribeToTransactions = () => {
-    api.events.on('transaction', function (data) {
+export const subscribeToTransactions = async () => {
+    conf.api.events.on('transaction', function (data) {
         // do stuff with portfolio data
         console.log(data);
     });
-    api.subscribeToTransactions();
+    conf.api.subscribeToTransactions().then(
+        (response) => { return response },
+        (error) => { return error }
+    );
 }
 
-export const subscribeToAllOpenContracts = () => {
-    api.events.on('proposal_open_contract', function (data) {
+export const subscribeToAllOpenContracts = async () => {
+    conf.api.events.on('proposal_open_contract', function (data) {
         // do stuff with portfolio data
         console.log(data);
     });
-    api.subscribeToAllOpenContracts();
+    return conf.api.subscribeToAllOpenContracts().then(
+        (response) => { return response },
+        (error) => { return error }
+    );
 }
