@@ -22,7 +22,7 @@ app.use((err, req, res, next) => {
     }
 })
 app.use((req, res, next) => {
-    console.log("REQUEST: ",req.hostname,req.method,req.originalUrl,req.body)
+    console.log("REQUEST: ", req.hostname, req.method, req.originalUrl, req.body)
     next()
 })
 app.get('/', async (req, res, next) => {
@@ -48,7 +48,8 @@ app.post('/', async (req, res, next) => {
     }
     if (req.query.cmd && req.query.cmd === "open") {
 
-        return res.json(openTrade(req.body));
+        const openRet = await openTrade(req.body)
+        return res.json(openRet);
     }
 
     res.sendFile(__dirname + '/index.html');
