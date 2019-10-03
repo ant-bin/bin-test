@@ -1,6 +1,6 @@
 const ws = require("ws")
 const LiveApi = require('binary-live-api').LiveApi;
-const { conf, status } = require("./conf")
+const { conf, opentrades } = require("./conf")
 
 export const startApi = async () => {
 
@@ -159,7 +159,16 @@ export const subscribeToTransactions = async () => {
 export const subscribeToAllOpenContracts = async () => {
     conf.api.events.on('proposal_open_contract', function (data) {
         // do stuff with portfolio data
-        console.log(data);
+        const open_contract = data.proposal_open_contract
+        //console.log("O: ", open_contract);
+        if (open_contract.contract_id === undefined) return
+        const tradeIndex = opentrades.findIndex((obj => obj.contract_id === open_contract.contract_id))
+        if (-1 < tradeIndex) {
+            opentrades[tradeIndex] = open_contract
+        }
+        else {
+            opentrades.push(open_contract)
+        }
     });
     return conf.api.subscribeToAllOpenContracts().then(
         (response) => { return response },
