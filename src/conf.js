@@ -8,3 +8,5 @@ export const conf = {
 
 export const status = {
 }
+
+export const opentrades = []
