@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 })
 app.get('/', async (req, res, next) => {
     if (req.query.cmd && req.query.cmd === "status") {
-        return res.json(getStatus());
+        return res.json(getStatus(req.query));
     }
     if (req.query.cmd && req.query.cmd === "ping") {
 

@@ -6,10 +6,11 @@ const {
     subscribeToBalance,
     subscribeToAllOpenContracts
 } = require("./apicommands.js")
-const { conf, status } = require("./conf")
+const { conf, status, opentrades } = require("./conf")
 
-export const getStatus = () => {
-    //const status = {}
+export const getStatus = (q = { cmd: "status" }) => {
+    //console.log(opentrades.length)
+    const ot = {}
     if (!conf.api) {
         status["api"] = "not connected"
     }
@@ -27,6 +28,14 @@ export const getStatus = () => {
     }
     if (conf.response) {
         status["response"] = conf.response
+    }
+    if (q.contract_id !== undefined) {
+        const contract_id = parseInt(q.contract_id)
+        const otidx = opentrades.findIndex((el => contract_id === el.contract_id))
+        //console.log(q, contract_id, otidx)
+        if (-1 < otidx) {
+            return { ...status, ot: opentrades[otidx] }
+        }
     }
     return status
 }
